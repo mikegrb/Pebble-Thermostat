@@ -1,0 +1,20 @@
+{
+  "uuid": "42e32e69-f844-462f-80e8-bbbef29440e0",
+  "shortName": "Thermostat",
+  "longName": "Thermostat",
+  "companyName": "mikegrb",
+  "versionCode": 1,
+  "versionLabel": "1.0.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "fetch": 0,
+    "temp":  1,
+    "mode":  2,
+    "set":   3
+  },
+  "resources": {
+    "media": []
+  }
+}
