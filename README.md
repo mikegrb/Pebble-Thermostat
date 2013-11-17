@@ -9,3 +9,4 @@ Just displays mode, inside temp, setpoint will add changing setpoint.
 
 May add setting URL for control script via Pebble iOS/Android app configuration in the future if local config html is added.
 
+![Screenshot](/screenshot/88901ca.png "Screenshot at 88901ca")
