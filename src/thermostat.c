@@ -31,14 +31,11 @@ void in_received_handler(DictionaryIterator *received, void *context) {
 
   if (temp_tuple) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Current temp: %s", temp_tuple->value->cstring);
-    text_layer_set_text(current_temp_layer, temp_tuple->value->cstring);
-  }
-  if (setpoint_tuple) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Setpoint: %s", setpoint_tuple->value->cstring);
-    text_layer_set_text(setpoint_layer, setpoint_tuple->value->cstring);
-  }
-  if (mode_tuple) {
     APP_LOG(APP_LOG_LEVEL_DEBUG, "Mode: %s", mode_tuple->value->cstring);
+
+    text_layer_set_text(current_temp_layer, temp_tuple->value->cstring);
+    text_layer_set_text(setpoint_layer, setpoint_tuple->value->cstring);
     text_layer_set_text(mode_layer, mode_tuple->value->cstring);
   }
 }
@@ -118,7 +115,7 @@ static void app_message_init(void) {
   app_message_register_inbox_dropped(in_dropped_handler);
   app_message_register_outbox_sent(out_sent_handler);
   app_message_register_outbox_failed(out_failed_handler);
-  app_message_open(64,64);
+  app_message_open(64, 64);
 }
 
 static void init(void) {
