@@ -15,6 +15,17 @@
     "set":   3
   },
   "resources": {
-    "media": []
+    "media": [
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_UP",
+        "file": "up.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_DOWN",
+        "file": "down.png"
+        }
+    ]
   }
 }

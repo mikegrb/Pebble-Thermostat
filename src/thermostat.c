@@ -4,12 +4,15 @@ static Window *window;
 static TextLayer *mode_layer;
 static TextLayer *setpoint_layer;
 static TextLayer *current_temp_layer;
+static ActionBarLayer *action_bar;
 
 enum {
-  DATA_KEY_FETCH = 0x0,
-  DATA_KEY_TEMP  = 0x1,
-  DATA_KEY_MODE  = 0x2,
-  DATA_KEY_SET   = 0x3
+  DATA_KEY_FETCH    = 0x0,
+  DATA_KEY_TEMP     = 0x1,
+  DATA_KEY_MODE     = 0x2,
+  DATA_KEY_SET      = 0x3,
+  RESOUCE_ICON_UP   = 0x1,
+  RESOUCE_ICON_DOWN = 0x2,
 }; 
 
 void out_sent_handler(DictionaryIterator *sent, void *context) {
@@ -77,22 +80,29 @@ static void window_load(Window *window) {
   GRect bounds = layer_get_bounds(window_layer);
 
   current_temp_layer = text_layer_create(
-      (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w, 50 } });
+      (GRect) { .origin = { 0, 20 }, .size = { bounds.size.w - 20, 50 } });
   text_layer_set_text_alignment(current_temp_layer, GTextAlignmentCenter);
   text_layer_set_font(current_temp_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   layer_add_child(window_layer, text_layer_get_layer(current_temp_layer));
 
   setpoint_layer = text_layer_create(
-      (GRect) { .origin = { 0, 70 }, .size = { bounds.size.w, 50 } });
+      (GRect) { .origin = { 0, 70 }, .size = { bounds.size.w - 20, 50 } });
   text_layer_set_text_alignment(setpoint_layer, GTextAlignmentCenter);
   text_layer_set_font(setpoint_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
   layer_add_child(window_layer, text_layer_get_layer(setpoint_layer));
 
   mode_layer = text_layer_create(
-      (GRect) { .origin = { 0, 100 }, .size = { bounds.size.w, 50 } });
+      (GRect) { .origin = { 0, 100 }, .size = { bounds.size.w - 20, 50 } });
   text_layer_set_text_alignment(mode_layer, GTextAlignmentCenter);
   text_layer_set_font(mode_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
   layer_add_child(window_layer, text_layer_get_layer(mode_layer));
+
+  action_bar = action_bar_layer_create();
+  action_bar_layer_add_to_window(action_bar, window);
+  action_bar_layer_set_click_config_provider(action_bar, click_config_provider);
+
+  action_bar_layer_set_icon(action_bar, BUTTON_ID_UP, gbitmap_create_with_resource( RESOUCE_ICON_UP ));
+  action_bar_layer_set_icon(action_bar, BUTTON_ID_DOWN, gbitmap_create_with_resource( RESOUCE_ICON_DOWN ));
 
   fetch_msg();
 }
