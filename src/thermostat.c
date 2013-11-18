@@ -5,6 +5,7 @@ static TextLayer *mode_layer;
 static TextLayer *setpoint_layer;
 static TextLayer *current_temp_layer;
 static ActionBarLayer *action_bar;
+static char str_new_setpoint[4];
 
 enum {
   DATA_KEY_FETCH    = 0x0,
@@ -54,16 +55,40 @@ static void fetch_msg(void) {
   app_message_outbox_send();
 }
 
+static int myatoi(const char *s) {
+  const char *p = s, *q;
+  int n = 0;
+  int sign = 1, k = 1;
+  if (p != NULL) {
+    if (*p != '\0') {
+      if ((*p == '+') || (*p == '-')) {
+        if (*p++ == '-') sign = -1;
+      }
+      for (q = p; (*p != '\0'); p++);
+      for (--p; p >= q; --p, k *= 10) n += (*p - '0') * k;
+    }
+  }
+  return n * sign;
+}
+
+static void change_setpoint (int change) {
+  int current_value = myatoi(text_layer_get_text(setpoint_layer));
+  int new_setpoint = current_value + change;
+  snprintf(str_new_setpoint, sizeof(str_new_setpoint), "%i", new_setpoint);
+  text_layer_set_text(setpoint_layer, str_new_setpoint);
+  // TODO: also actually, you know, set it
+}
+
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   fetch_msg();
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-
+  change_setpoint( 1 );
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-
+  change_setpoint( -1 );
 }
 
 static void click_config_provider(void *context) {
