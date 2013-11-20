@@ -25,7 +25,17 @@
         "type": "png",
         "name": "IMAGE_ACTION_ICON_DOWN",
         "file": "down.png"
-        }
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_REFRESH",
+        "file": "refresh.png"
+      },
+      {
+        "type": "png",
+        "name": "IMAGE_ACTION_ICON_APPLY",
+        "file": "apply.png"
+      }
     ]
   }
 }

@@ -6,15 +6,18 @@ static TextLayer *setpoint_layer;
 static TextLayer *current_temp_layer;
 static ActionBarLayer *action_bar;
 static char str_new_setpoint[4];
+static uint16_t setpoint_changed = 0;
 
 enum {
-  DATA_KEY_FETCH    = 0x0,
-  DATA_KEY_TEMP     = 0x1,
-  DATA_KEY_MODE     = 0x2,
-  DATA_KEY_SET      = 0x3,
-  RESOUCE_ICON_UP   = 0x1,
-  RESOUCE_ICON_DOWN = 0x2,
-}; 
+  DATA_KEY_FETCH       = 0x0,
+  DATA_KEY_TEMP        = 0x1,
+  DATA_KEY_MODE        = 0x2,
+  DATA_KEY_SET         = 0x3,
+  RESOUCE_ICON_UP      = 0x1,
+  RESOUCE_ICON_DOWN    = 0x2,
+  RESOUCE_ICON_REFRESH = 0x3,
+  RESOUCE_ICON_APPLY   = 0x4,
+};
 
 void out_sent_handler(DictionaryIterator *sent, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message sent successfully!");
@@ -76,11 +79,25 @@ static void change_setpoint (int change) {
   int new_setpoint = current_value + change;
   snprintf(str_new_setpoint, sizeof(str_new_setpoint), "%i", new_setpoint);
   text_layer_set_text(setpoint_layer, str_new_setpoint);
-  // TODO: also actually, you know, set it
+
+  if (setpoint_changed == 0) {
+    action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT,
+      gbitmap_create_with_resource( RESOUCE_ICON_APPLY ));
+    setpoint_changed = 1;
+  }
 }
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  fetch_msg();
+  if (setpoint_changed == 0) {
+    fetch_msg();
+  }
+  else {
+      // TODO: also actually, you know, set it
+    fetch_msg();
+    setpoint_changed = 0;
+    action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT,
+      gbitmap_create_with_resource( RESOUCE_ICON_REFRESH ));
+  }
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -124,6 +141,7 @@ static void window_load(Window *window) {
   action_bar_layer_set_click_config_provider(action_bar, click_config_provider);
 
   action_bar_layer_set_icon(action_bar, BUTTON_ID_UP, gbitmap_create_with_resource( RESOUCE_ICON_UP ));
+  action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT, gbitmap_create_with_resource( RESOUCE_ICON_REFRESH ));
   action_bar_layer_set_icon(action_bar, BUTTON_ID_DOWN, gbitmap_create_with_resource( RESOUCE_ICON_DOWN ));
 
   fetch_msg();
