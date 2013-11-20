@@ -31,9 +31,9 @@ void in_received_handler(DictionaryIterator *received, void *context) {
   Tuple *mode_tuple = dict_find(received, DATA_KEY_MODE);
 
   if (temp_tuple) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Current temp: %s", temp_tuple->value->cstring);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Setpoint: %s", setpoint_tuple->value->cstring);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Mode: %s", mode_tuple->value->cstring);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Temp: %s, Setpoint: %s, Mode: %s",
+        temp_tuple->value->cstring, setpoint_tuple->value->cstring,
+        mode_tuple->value->cstring);
 
     text_layer_set_text(current_temp_layer, temp_tuple->value->cstring);
     text_layer_set_text(setpoint_layer, setpoint_tuple->value->cstring);
