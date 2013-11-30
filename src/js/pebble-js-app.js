@@ -6,8 +6,14 @@ Pebble.addEventListener("ready",
 
 Pebble.addEventListener("appmessage",
   function (e) {
-    console.log("Received message: " + e.payload);
-    fetchData();
+    if(e.payload.set) {
+      console.log("Received set message: " + e.payload.set);
+      changeSetpoint(e.payload.set);
+    }
+    else {
+      console.log("Received fetch message");
+      fetchData();
+    }
   }
 );
 
