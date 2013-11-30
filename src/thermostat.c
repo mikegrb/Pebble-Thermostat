@@ -48,6 +48,16 @@ void in_dropped_handler(AppMessageResult reason, void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Dropped!");
 }
 
+static void setpoint_msg(void) {
+  text_layer_set_text(mode_layer, "Setting...");
+  DictionaryIterator *iter;
+  app_message_outbox_begin(&iter);
+  Tuplet value = TupletCString(
+    DATA_KEY_SET, text_layer_get_text(setpoint_layer) );
+  dict_write_tuplet(iter, &value);
+  app_message_outbox_send();
+}
+
 static void fetch_msg(void) {
   text_layer_set_text(current_temp_layer, "---");
   text_layer_set_text(mode_layer, "Fetching...");
@@ -92,8 +102,7 @@ static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
     fetch_msg();
   }
   else {
-      // TODO: also actually, you know, set it
-    fetch_msg();
+    setpoint_msg();
     setpoint_changed = 0;
     action_bar_layer_set_icon(action_bar, BUTTON_ID_SELECT,
       gbitmap_create_with_resource( RESOUCE_ICON_REFRESH ));
