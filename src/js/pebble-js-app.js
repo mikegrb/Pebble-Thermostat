@@ -1,24 +1,6 @@
-var base_url;
+/*jslint browser: true, devel: true, sloppy: true, vars: true, indent: 2 */
 
-Pebble.addEventListener("ready",
-  function (e) {
-      console.log("ready");
-      base_url = 'http://thegrebs.com/~michael/.thermostat.pl?token=' + Pebble.getAccountToken();
-  }
-);
-
-Pebble.addEventListener("appmessage",
-  function (e) {
-    if(e.payload.set) {
-      console.log("Received set message: " + e.payload.set);
-      fetchData(e.payload.set);
-    }
-    else {
-      console.log("Received fetch message");
-      fetchData();
-    }
-  }
-);
+var base_url = 'http://thegrebs.com/~michael/.thermostat.pl?token=';
 
 function fetchData(setpoint) {
   var response;
@@ -26,9 +8,9 @@ function fetchData(setpoint) {
 
   var req = new XMLHttpRequest();
   req.open('GET', url, true);
-  req.onload = function(e) {
-    if (req.readyState == 4) {
-      if(req.status == 200) {
+  req.onload = function () {
+    if (req.readyState === 4) {
+      if (req.status === 200) {
         console.log(req.responseText);
         response = JSON.parse(req.responseText);
         if (response.temp) {
@@ -41,3 +23,20 @@ function fetchData(setpoint) {
   };
   req.send();
 }
+
+Pebble.addEventListener("ready",
+  function () {
+    console.log("ready");
+    base_url = base_url + Pebble.getAccountToken();
+  });
+
+Pebble.addEventListener("appmessage",
+  function (e) {
+    if (e.payload.set) {
+      console.log("Received set message: " + e.payload.set);
+      fetchData(e.payload.set);
+    } else {
+      console.log("Received fetch message");
+      fetchData();
+    }
+  });
