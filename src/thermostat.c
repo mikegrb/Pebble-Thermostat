@@ -63,7 +63,7 @@ static void fetch_msg(void) {
   text_layer_set_text(mode_layer, "Fetching...");
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
-  Tuplet value = TupletInteger(0, 1);
+  Tuplet value = TupletInteger(DATA_KEY_FETCH, 1);
   dict_write_tuplet(iter, &value);
   app_message_outbox_send();
 }
@@ -178,8 +178,7 @@ static void init(void) {
     .load = window_load,
     .unload = window_unload,
   });
-  const bool animated = true;
-  window_stack_push(window, animated);
+  window_stack_push(window, true);
 }
 
 static void deinit(void) {
